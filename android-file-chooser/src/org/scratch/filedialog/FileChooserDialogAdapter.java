@@ -1,7 +1,16 @@
 /**
+ * Android File Chooser
+ * Copyright (C) 2012  ScR4tCh
+ * Contact scr4tch@scr4tch.org
+ *
  * This is a fork of android-file-dialog (com.lamerman) licensed new BSD
  * Take a look at https://code.google.com/p/android-file-dialog/
- * 
+ *
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Lesser GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.scratch.filedialog;
@@ -112,9 +121,7 @@ public class FileChooserDialogAdapter implements ListAdapter
 					if(!file.isDirectory())
 						files.remove(file);
 					break;
-			}
-			
-			//TODO: filter !!!
+			}			
 		}
 		
 		if(!currentPath.equals(ROOT) && (viewMode&FileChooserDialog.SELECT_FOLDER)==FileChooserDialog.SELECT_FOLDER)
@@ -158,48 +165,47 @@ public class FileChooserDialogAdapter implements ListAdapter
 		return R.layout.file_dialog_row;
 	}
 
-
-
 	@Override
 	public View getView(int position,View convertView,ViewGroup parent)
 	{
-		 View v = convertView;
-	        
-	        if (v == null)
-	        {
-	            LayoutInflater vi = (LayoutInflater)parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	            v = vi.inflate(R.layout.file_dialog_row, null);
-	        }
-	        
-//	        if(position%2==0)
-//	        	v.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
-	        
-	        TextView filename = (TextView) v.findViewById(R.id.fdrowtext);	                
-            ImageView fileico = (ImageView) v.findViewById(R.id.fdrowimage);
-	        
-	        File f = files.elementAt(position);
-	        
-		        if (f != null)
-		        {
-	                if (filename != null)
-	                {
-	                	if(aliasMap.containsKey(f))
-	                		filename.setText(aliasMap.get(f));
-	                	else
-	                		filename.setText(f.getName());
-	                }
-	               
-	                if (fileico != null)
-	                {
-	                	if(f.isDirectory())
-	                		fileico.setImageBitmap(fileDialog.folderDrawable);
-	                	else
-	                		fileico.setImageBitmap(fileDialog.fileDrawable);
-	            }
+		View v=convertView;
 
-	        }               
-	        
-	        return v;
+		if(v==null)
+		{
+			LayoutInflater vi=(LayoutInflater)parent.getContext()
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			v=vi.inflate(R.layout.file_dialog_row,null);
+		}
+
+		// if(position%2==0)
+		// v.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
+
+		TextView filename=(TextView)v.findViewById(R.id.fdrowtext);
+		ImageView fileico=(ImageView)v.findViewById(R.id.fdrowimage);
+
+		File f=files.elementAt(position);
+
+		if(f!=null)
+		{
+			if(filename!=null)
+			{
+				if(aliasMap.containsKey(f))
+					filename.setText(aliasMap.get(f));
+				else
+					filename.setText(f.getName());
+			}
+
+			if(fileico!=null)
+			{
+				if(f.isDirectory())
+					fileico.setImageBitmap(fileDialog.folderDrawable);
+				else
+					fileico.setImageBitmap(fileDialog.fileDrawable);
+			}
+
+		}
+
+		return v;
 	}
 
 
