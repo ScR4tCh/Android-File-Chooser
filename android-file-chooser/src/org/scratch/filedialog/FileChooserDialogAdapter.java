@@ -36,6 +36,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
+//TODO: multi selection function
+
+
 public class FileChooserDialogAdapter implements ListAdapter
 {
 	protected static final String ROOT="/";
@@ -58,13 +62,15 @@ public class FileChooserDialogAdapter implements ListAdapter
 	
 	private FileChooserDialog fileDialog;
 	
-	
+	private int selected=-1;
+		
 	public FileChooserDialogAdapter(FileChooserDialog fileDialog, String startPath,int viewMode,FileFilter ff)
 	{
 		this.fileDialog=fileDialog;
 		this.viewMode=viewMode;
 		this.ff=ff;
 		updatefiles(startPath);
+		
 	}
 
 	protected void update(final String dirPath)
@@ -77,6 +83,9 @@ public class FileChooserDialogAdapter implements ListAdapter
 	
 	private void updatefiles(final String dirPath)
 	{
+		if(!currentPath.equals(dirPath))
+			selected=-1;
+		
 		currentPath=dirPath;
 		aliasMap.clear();
 
@@ -135,6 +144,7 @@ public class FileChooserDialogAdapter implements ListAdapter
 
 
 
+
 	@Override
 	public int getCount()
 	{
@@ -177,12 +187,19 @@ public class FileChooserDialogAdapter implements ListAdapter
 			v=vi.inflate(R.layout.file_dialog_row,null);
 		}
 
-		// if(position%2==0)
-		// v.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
-
 		TextView filename=(TextView)v.findViewById(R.id.fdrowtext);
 		ImageView fileico=(ImageView)v.findViewById(R.id.fdrowimage);
+		ImageView selectico=(ImageView)v.findViewById(R.id.selected);
 
+		if(position==selected && selectico.getVisibility()==View.GONE)
+		{
+			selectico.setVisibility(View.VISIBLE);
+		}
+		else if(position!=selected && selectico.getVisibility()==View.VISIBLE)
+		{
+			selectico.setVisibility(View.GONE);
+		}
+		
 		File f=files.elementAt(position);
 
 		if(f!=null)
@@ -278,5 +295,16 @@ public class FileChooserDialogAdapter implements ListAdapter
 	public final String getCurrentPath()
 	{
 		return currentPath;
+	}
+	
+	public void setSelected(int selected)
+	{
+		if(this.selected==selected)
+			this.selected=-1;
+		else
+			this.selected=selected;
+		
+		for(int i=0;i<dso.size();i++)
+			dso.elementAt(i).onInvalidated();
 	}
 }

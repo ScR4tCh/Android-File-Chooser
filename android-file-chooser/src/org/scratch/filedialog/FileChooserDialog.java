@@ -258,7 +258,7 @@ public class FileChooserDialog extends ListActivity
 				if((selectMode&SELECT_FOLDER)==SELECT_FOLDER)
 				{
 					selectedFile=file;
-					v.setSelected(true);
+					fileAdapter.setSelected(position);
 					selectButton.setEnabled(true);
 				}
 			}
@@ -283,7 +283,7 @@ public class FileChooserDialog extends ListActivity
 		else
 		{
 			selectedFile=file;
-			v.setSelected(true);
+			fileAdapter.setSelected(position);
 			selectButton.setEnabled(true);
 		}
 	}

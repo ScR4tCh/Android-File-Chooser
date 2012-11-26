@@ -10,7 +10,7 @@
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentBottom="true"
 	    android:orientation="vertical"
-	    android:paddingTop="5dp" >
+	    android:padding="5dp" >
 
 		<LinearLayout android:id="@+id/fdLinearLayoutSelect"
 			android:orientation="vertical" android:layout_width="fill_parent"
@@ -52,13 +52,22 @@
 
 	</LinearLayout>
 
-	<LinearLayout android:orientation="vertical"
-		android:layout_width="fill_parent" android:layout_height="fill_parent"
-		android:layout_above="@+id/fdLinearLayoutList">
+	<LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_above="@+id/fdLinearLayoutList"
+	    android:orientation="vertical"
+	    android:paddingLeft="10dp"
+	    android:paddingRight="10dp" >
+
 		<TextView android:id="@+id/path" android:layout_width="fill_parent"
 			android:layout_height="wrap_content" />
-		<ListView android:id="@android:id/list" android:layout_width="fill_parent"
-			android:layout_height="fill_parent" />
+
+		<ListView
+		    android:id="@android:id/list"
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent" />
+
 		<TextView android:id="@android:id/empty"
 			android:layout_width="fill_parent" android:layout_height="fill_parent"
 			android:text="@string/no_data" />
