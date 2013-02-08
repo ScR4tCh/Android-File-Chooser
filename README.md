@@ -32,20 +32,21 @@ Bitmap for folder icon.
 
 
 ##example:
-	Intent intent = new Intent(getBaseContext(),FileChooserDialog.class);
-	intent.putExtra(FileChooserDialog.START_PATH, Environment.getExternalStorageDirectory().getAbsolutePath());
-	intent.putExtra(FileChooserDialog.SELECT_MODE, FileChooserDialog.MODE_OPEN);
+```java
+Intent intent = new Intent(getBaseContext(),FileChooserDialog.class);
+intent.putExtra(FileChooserDialog.START_PATH, Environment.getExternalStorageDirectory().getAbsolutePath());
+intent.putExtra(FileChooserDialog.SELECT_MODE, FileChooserDialog.MODE_OPEN);
 
-	//can user select directories or not
-	intent.putExtra(FileChooserDialog.VIEW_MODE, FileChooserDialog.SELECT_FILE);
-	intent.putExtra(FileChooserDialog.FILE_DRAWABLE, BitmapFactory.decodeResource(getResources(),R.drawable.fontfile));
-	intent.putExtra(FileChooserDialog.FOLDER_DRAWABLE, BitmapFactory.decodeResource(getResources(),R.drawable.folder));
-	intent.putExtra(FileChooserDialog.UP_DRAWABLE, BitmapFactory.decodeResource(getResources(),R.drawable.folderup));
-                              
-	FileChooserFileFilter[] cf = new FileChooserFileFilter[]{new SuffixFileFilter(new String[]{"ttf"}),new FolderFileFilter()}; 
-	intent.putExtra(FileChooserDialog.FORMAT_FILTER,new CombinedFileFilter(cf,CombinedCheck.OR));
+//can user select directories or not
+intent.putExtra(FileChooserDialog.VIEW_MODE, FileChooserDialog.SELECT_FILE);
+intent.putExtra(FileChooserDialog.FILE_DRAWABLE, BitmapFactory.decodeResource(getResources(),R.drawable.fontfile));
+intent.putExtra(FileChooserDialog.FOLDER_DRAWABLE, BitmapFactory.decodeResource(getResources(),R.drawable.folder));
+intent.putExtra(FileChooserDialog.UP_DRAWABLE, BitmapFactory.decodeResource(getResources(),R.drawable.folderup));
+                             
+FileChooserFileFilter[] cf = new FileChooserFileFilter[]{new SuffixFileFilter(new String[]{"ttf"}),new FolderFileFilter()}; 
+intent.putExtra(FileChooserDialog.FORMAT_FILTER,new CombinedFileFilter(cf,CombinedCheck.OR));
 
-	startActivityForResult(intent,CHOOSE_FONT);
-
+startActivityForResult(intent,CHOOSE_FONT);
+```
 
 This lib is licensed under The LGPL.
