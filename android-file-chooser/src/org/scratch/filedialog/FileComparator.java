@@ -20,9 +20,12 @@ import java.util.Comparator;
 
 public class FileComparator implements Comparator<File>
 {
+		//TODO: add options ! (folders first, strictly alphabetical , ....)
+	
 		@Override
 		public int compare(File one,File two)
 		{
+			//directories first !
 			if(one.isDirectory() && !two.isDirectory())
 			{
 				return -1;
@@ -33,7 +36,28 @@ public class FileComparator implements Comparator<File>
 			}
 			else
 			{
-				return one.compareTo(two);
+				String so = one.getName();
+				String st = two.getName();
+				
+				if(so.toLowerCase().charAt(0)==st.toLowerCase().charAt(0))
+				{
+					if(so.charAt(0)<st.charAt(0))
+					{
+						return -1;
+					}
+					else if(so.charAt(0)>st.charAt(0))
+					{
+						return 1;
+					}
+					else
+					{
+						return so.substring(1).compareTo(st.substring(1));
+					}
+				}
+				else
+				{	
+					return one.compareTo(two);
+				}
 			}
 		}
 }

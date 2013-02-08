@@ -53,9 +53,11 @@
 	</LinearLayout>
 
 	<LinearLayout
+	    android:id="@+id/viewbox"
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
 	    android:layout_above="@+id/fdLinearLayoutList"
+	    android:layout_below="@+id/toolbox"
 	    android:orientation="vertical"
 	    android:paddingLeft="10dp"
 	    android:paddingRight="10dp" >
@@ -73,7 +75,13 @@
 			android:text="@string/no_data" />
 	</LinearLayout>
 
-
-
+	<LinearLayout
+	    android:id="@+id/toolbox"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentRight="true"
+	    android:layout_alignParentTop="true"
+	    android:gravity="right" >
+	</LinearLayout>
 
 </RelativeLayout>

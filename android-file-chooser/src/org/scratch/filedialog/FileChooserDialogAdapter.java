@@ -17,8 +17,10 @@ package org.scratch.filedialog;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -63,30 +65,34 @@ public class FileChooserDialogAdapter implements ListAdapter
 	private FileChooserDialog fileDialog;
 	
 	private int selected=-1;
+	
+	private boolean browsing;
+
 		
-	public FileChooserDialogAdapter(FileChooserDialog fileDialog, String startPath,int viewMode,FileFilter ff)
+	public FileChooserDialogAdapter(FileChooserDialog fileDialog, String startPath,int viewMode,boolean browsing,final FileFilter ff)
 	{
 		this.fileDialog=fileDialog;
 		this.viewMode=viewMode;
+		this.browsing=browsing;
 		this.ff=ff;
-		updatefiles(startPath);
 		
+		updatefiles(startPath);
 	}
 
 	protected void update(final String dirPath)
 	{
 		updatefiles(dirPath);
 		
-		for(int i=0;i<dso.size();i++)
-			dso.elementAt(i).onInvalidated();
+		informObservers();
 	}
 	
-	private void updatefiles(final String dirPath)
+	private synchronized void updatefiles(final String dirPath)
 	{
 		if(!currentPath.equals(dirPath))
 			selected=-1;
 		
-		currentPath=dirPath;
+		currentPath=dirPath;	
+		
 		aliasMap.clear();
 
 		File f=new File(currentPath);
@@ -94,7 +100,7 @@ public class FileChooserDialogAdapter implements ListAdapter
 		parentPath=f.getParent();
 		
 		File[] filesa;
-		
+				
 		if(ff!=null)
 			filesa = f.listFiles(ff);
 		else
@@ -109,7 +115,6 @@ public class FileChooserDialogAdapter implements ListAdapter
 		else
 		{
 			files=new Vector<File>(Arrays.asList(filesa));
-			
 		}
 		
 		//sort root->folders->files
@@ -118,14 +123,14 @@ public class FileChooserDialogAdapter implements ListAdapter
 		for(int i=0;i<files.size();i++)
 		{
 			File file=files.elementAt(i);
-			
+				
 			switch(viewMode)
 			{
 				case FileChooserDialog.SELECT_FILE:
-					if(file.isDirectory())
+					if(file.isDirectory() && !browsing)
 						files.remove(file);
 					break;
-					
+						
 				case FileChooserDialog.SELECT_FOLDER:
 					if(!file.isDirectory())
 						files.remove(file);
@@ -133,12 +138,16 @@ public class FileChooserDialogAdapter implements ListAdapter
 			}			
 		}
 		
-		if(!currentPath.equals(ROOT) && (viewMode&FileChooserDialog.SELECT_FOLDER)==FileChooserDialog.SELECT_FOLDER)
+		if(!currentPath.equals(ROOT) && browsing)
 		{
 			File up = f.getParentFile();
 			files.add(0,up);
 			aliasMap.put(up,"..");
 		}
+		
+//		informObservers();
+		for(int i=0;i<dso.size();i++)
+			dso.elementAt(i).onInvalidated();
 
 	}
 
@@ -150,8 +159,6 @@ public class FileChooserDialogAdapter implements ListAdapter
 	{
 		return files.size();
 	}
-
-
 
 	@Override
 	public Object getItem(int position)
@@ -188,6 +195,9 @@ public class FileChooserDialogAdapter implements ListAdapter
 		}
 
 		TextView filename=(TextView)v.findViewById(R.id.fdrowtext);
+		TextView info1=(TextView)v.findViewById(R.id.info1);
+		TextView info2=(TextView)v.findViewById(R.id.info2);
+		
 		ImageView fileico=(ImageView)v.findViewById(R.id.fdrowimage);
 		ImageView selectico=(ImageView)v.findViewById(R.id.selected);
 
@@ -212,13 +222,21 @@ public class FileChooserDialogAdapter implements ListAdapter
 					filename.setText(f.getName());
 			}
 
+			//TODO: override for "defined" files/folders (i.e. given list) : mime-detect ?
 			if(fileico!=null)
 			{
-				if(f.isDirectory())
+				//Booo, not elegeant !
+				if(aliasMap.containsKey(f) && f.isDirectory() && aliasMap.get(f).equals(".."))
+					fileico.setImageBitmap(fileDialog.upDrawable);
+				else if(f.isDirectory())
 					fileico.setImageBitmap(fileDialog.folderDrawable);
 				else
 					fileico.setImageBitmap(fileDialog.fileDrawable);
 			}
+			
+			//TODO: make optional (visibility)!
+			info1.setText(readableFileSize(f.length()));
+			info2.setText(android.text.format.DateFormat.getDateFormat(fileDialog.getBaseContext()).format(new Date(f.lastModified())));			
 
 		}
 
@@ -307,4 +325,24 @@ public class FileChooserDialogAdapter implements ListAdapter
 		for(int i=0;i<dso.size();i++)
 			dso.elementAt(i).onInvalidated();
 	}
+	
+	public void informObservers()
+	{
+		for(int i=0;i<dso.size();i++)
+				dso.elementAt(i).onChanged();
+	}
+	
+	/**
+	 * THX TO : http://stackoverflow.com/questions/3263892/format-file-size-as-mb-gb-etc
+	 * @param size
+	 * @return
+	 */
+	public static String readableFileSize(long size)
+	{
+	    if(size <= 0) return "0";
+	    final String[] units = new String[] { "B", "KB", "MB", "GB", "TB" };
+	    int digitGroups = (int) (Math.log10(size)/Math.log10(1024));
+	    return new DecimalFormat("#,##0.#").format(size/Math.pow(1024, digitGroups)) + " " + units[digitGroups];
+	}
+
 }

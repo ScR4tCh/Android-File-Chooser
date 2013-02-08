@@ -28,12 +28,20 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+
+/**
+ * TODO ON FILE CREATION : 
+ *
+ *	sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"
+ *       + Environment.getExternalStorageDirectory()))); 
+**/
 
 /**
  * Activity for file selection
@@ -54,6 +62,9 @@ public class FileChooserDialog extends ListActivity
 			
 	private int selectMode=SELECT_FOLDER|SELECT_FILE;
 	private int viewMode=SELECT_FOLDER|SELECT_FILE;
+	
+	//allow "browsing"
+	private boolean browseEanbled=true;
 	
 	// mode of operation (CREATE OR JUST OPEN)
 	public static final int MODE_CREATE = 0;
@@ -79,6 +90,8 @@ public class FileChooserDialog extends ListActivity
 	public static final String SELECT_MODE="SELECT_MODE";
 	
 	public static final String VIEW_MODE="VIEW_MODE";
+	
+	public static final String BROWSE_ENABLED="BROWSE_ENABLED";
 
 	public static final String FILE_DRAWABLE="FILE_DRAWABLE";
 
@@ -105,6 +118,9 @@ public class FileChooserDialog extends ListActivity
 	{
 		super.onCreate(savedInstanceState);
 
+		//TODO: optional ?
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
 		//set default drawables
 		folderDrawable=BitmapFactory.decodeResource(getResources(), R.drawable.folder);
 		fileDrawable=BitmapFactory.decodeResource(getResources(),   R.drawable.file);
@@ -156,6 +172,8 @@ public class FileChooserDialog extends ListActivity
 		operationMode=i.getIntExtra(OPERATION_MODE,MODE_OPEN);
 		viewMode=i.getIntExtra(VIEW_MODE,viewMode);
 		selectMode=i.getIntExtra(SELECT_MODE,selectMode);
+		
+		browseEanbled=i.getBooleanExtra(BROWSE_ENABLED,browseEanbled);
 		
 		if(i.getParcelableExtra(FORMAT_FILTER) instanceof FileFilter)
 			ff=(FileFilter)i.getParcelableExtra(FORMAT_FILTER);
@@ -223,9 +241,10 @@ public class FileChooserDialog extends ListActivity
 		if(selectedFile.isDirectory() && (selectMode&SELECT_FOLDER)==SELECT_FOLDER)
 			selectButton.setEnabled(true);
 
-		fileAdapter = new FileChooserDialogAdapter(this,startPath,viewMode,ff);
+		fileAdapter = new FileChooserDialogAdapter(this,startPath,viewMode,browseEanbled,ff);
 		getListView().setAdapter(fileAdapter);
 		
+		myPath.setText(getText(R.string.location)+": "+fileAdapter.getCurrentPath());
 	}
 	
 	@Override

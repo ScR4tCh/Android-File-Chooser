@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-				android:layout_width="fill_parent"
-				android:layout_height="fill_parent"
->
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="left" >
 
 	<ImageView android:layout_alignParentLeft="true"
 	    	   android:id="@+id/fdrowimage"
@@ -25,17 +24,40 @@
 	    android:src="@drawable/tick"
 	    android:visibility="gone" />
 	
-	<TextView	android:text="@+id/fdrowtext"
-	    		android:layout_width="wrap_content"
-				android:id="@+id/fdrowtext"
-				android:layout_toRightOf="@+id/fdrowimage"
-				android:layout_alignTop="@+id/fdrowimage"
-				android:layout_alignBottom="@+id/fdrowimage"
-				android:gravity="center_vertical"
-				android:layout_height="wrap_content"
-				android:textSize="23dp">
+	<TextView
+	    android:id="@+id/fdrowtext"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBottom="@+id/fdrowimage"
+	    android:layout_alignParentRight="true"
+	    android:layout_alignTop="@+id/fdrowimage"
+	    android:layout_toRightOf="@+id/fdrowimage"
+	    android:gravity="center_vertical"
+	    android:text="@+id/fdrowtext"
+	    android:textAppearance="?android:attr/textAppearanceMedium" >
+
 	</TextView>
 
-	
+	<TextView
+	    android:id="@+id/info1"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/fdrowtext"
+	    android:layout_alignParentRight="true"
+	    android:layout_below="@+id/fdrowtext"
+	    android:gravity="left"
+	    android:textAppearance="?android:attr/textAppearanceSmall"
+	    android:visibility="gone" />
+
+	<TextView
+	    android:id="@+id/info2"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/info1"
+	    android:layout_alignParentRight="true"
+	    android:layout_below="@+id/info1"
+	    android:gravity="left"
+	    android:textAppearance="?android:attr/textAppearanceSmall"
+	    android:visibility="gone" />
 
 </RelativeLayout>
