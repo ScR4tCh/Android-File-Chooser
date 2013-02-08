@@ -4,6 +4,7 @@ This is a fork of the android-file-dialog https://code.google.com/p/android-file
 
 Intentprocessing and file listing were changed as well as the layout (little improvements).
 
+##Intent flags
 There are several fields that may be specified for the Intent calling the Activity:
 
 ###START_PATH
